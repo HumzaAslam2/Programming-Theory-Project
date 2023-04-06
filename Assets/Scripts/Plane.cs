@@ -11,10 +11,6 @@ public class Plane : Vehicle
         {
             transform.Translate(Vector3.forward * speed * Time.deltaTime);
         }
-        else if (Input.GetKey(KeyCode.DownArrow))
-        {
-            transform.Translate(Vector3.back * speed * Time.deltaTime);
-        }
 
         // Left and right rotation
         if (Input.GetKey(KeyCode.RightArrow))
