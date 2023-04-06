@@ -61,7 +61,7 @@ public class Vehicle : MonoBehaviour
         }
     }
 
-    protected virtual void TurnOn()
+    protected void TurnOn()
     {
         engineIsOn = true;
         speed = speedSlider.value;
@@ -72,10 +72,10 @@ public class Vehicle : MonoBehaviour
     {
         float forwardInput = Input.GetAxis("Vertical");
 
-        transform.Translate(transform.forward * speed * forwardInput * Time.deltaTime);
+        transform.Translate(Vector3.forward * speed * forwardInput * Time.deltaTime);
     }
 
-    protected virtual void TurnOff()
+    protected void TurnOff()
     {
         engineIsOn = false;
         speed = 0;
