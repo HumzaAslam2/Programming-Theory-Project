@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class Vehicle : MonoBehaviour
 {
-    protected int year;
+    protected float speed;
+    [SerializeField] protected bool engineIsOn = false;
+    [SerializeField] protected int year;
 
     public int Year
     {
@@ -25,21 +29,62 @@ public class Vehicle : MonoBehaviour
         }
     }
 
-    [SerializeField] protected float speed = 5;
+    [SerializeField] protected float minSpeed = 5;
+    [SerializeField] protected float maxSpeed = 200;
     [SerializeField] protected float rotationSpeed = 10;
+    [SerializeField] protected Button turnOnButton;
+    [SerializeField] protected Button turnOffButton;
+    [SerializeField] protected Slider speedSlider;
+    [SerializeField] protected TextMeshProUGUI currentSpeedText;
+    
+    private void Awake()
+    {
+        speedSlider.minValue = minSpeed;
+        speedSlider.maxValue = maxSpeed;
+        speed = minSpeed;
+        currentSpeedText.text = "Current Speed: 0";
+    }
+
+    private void Start()
+    {
+        turnOnButton.onClick.AddListener(TurnOn);
+        turnOffButton.onClick.AddListener(TurnOff);
+        speedSlider.onValueChanged.AddListener(delegate { ChangeSpeed(); });
+    }
 
     // Update is called once per frame
     void Update()
     {
-        Move();
+        if (engineIsOn)
+        {
+            Move();
+        }
+    }
+
+    protected virtual void TurnOn()
+    {
+        engineIsOn = true;
+        speed = speedSlider.value;
+        currentSpeedText.text = $"Current Speed: {speed}";
     }
 
     protected virtual void Move()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
         float forwardInput = Input.GetAxis("Vertical");
 
         transform.Translate(transform.forward * speed * forwardInput * Time.deltaTime);
-        transform.Rotate(Vector3.up, rotationSpeed * horizontalInput * Time.deltaTime);
+    }
+
+    protected virtual void TurnOff()
+    {
+        engineIsOn = false;
+        speed = 0;
+        currentSpeedText.text = "Current Speed: 0";
+    }
+
+    protected void ChangeSpeed()
+    {
+        speed = speedSlider.value;
+        currentSpeedText.text = $"Current Speed: {speed}";
     }
 }
